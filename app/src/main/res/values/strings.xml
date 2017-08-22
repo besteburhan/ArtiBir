@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">ArtiBir</string>
+    <string name="sign_in">GİRİŞ  YAP</string>
+    <string name="sign_up">KAYIT  OL</string>
+    <string name="forgotten_password">Şifrenizi mi unuttunuz?</string>
+    <string name="password">Şifre</string>
+    <string name="e_mail">E-mail</string>
+    <string name="title_activity_second">SecondActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="tab_ask_question">Soru Sor</string>
+    <string name="tab_questions">Sorular</string>
+    <string name="tab_saved_questions">Kaydedilmiş Sorular</string>
+    <string name="where_do_you_want_to_go">Nereye gitmek istiyorsunuz?</string>
+    <string name="go">GİT</string>
+
+
+    <string name="map_type_hybrid">Uydu Görünümü</string>
+    <string name="map_type_normal">Normal Görünümü</string>
+    <string name="choose_location">Konum Seçiniz</string>
+
+    <string name="with_facebook_sign_in">Facebook ile Giriş Yap</string>
+    <string name="log_out">Çıkış Yap</string>
+
+    <string name="facebook_app_id">125566654739298</string>
+    <string name="fb_login_protocol_scheme">fb125566654739298</string>
+    <string name="profile">Profil</string>
+
+</resources>

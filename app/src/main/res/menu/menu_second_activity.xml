@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:title="@string/profile"
+        android:id="@+id/profile"
+        android:icon="@drawable/profile"
+        app:showAsAction="always"
+        />
+    <item
+        android:title="@string/log_out"
+        android:id="@+id/log_out_button"
+        app:showAsAction="never"/>
+</menu>
