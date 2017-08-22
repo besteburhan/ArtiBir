@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -43,6 +44,8 @@ public class SecondActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
 
+        FacebookSdk.sdkInitialize(getApplicationContext());//kontrol et??
+        
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         //setupWithViewPager set up TabLayout with a viewpager
         tabLayout.setupWithViewPager(mViewPager);
@@ -87,8 +90,10 @@ public class SecondActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.log_out_button:
-                FirebaseAuth.getInstance().signOut();
+                FacebookSdk.sdkInitialize(getApplicationContext());//kontrol et??
                 LoginManager.getInstance().logOut();
+                FirebaseAuth.getInstance().signOut();
+
                 startActivity(new Intent(SecondActivity.this,MainActivity.class));
                 finish();
 

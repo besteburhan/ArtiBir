@@ -31,13 +31,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     FirebaseAuth mAuth;
 
-    LoginButton loginButton;
-    CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_sign_up);
 
@@ -49,76 +46,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         editTextPassword=(EditText) findViewById(R.id.editTextPassword);
         buttonSignUp = (Button) findViewById(R.id.buttonSignUp);
         mAuth = FirebaseAuth.getInstance();
-        loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
-        loginButton.setReadPermissions("email", "public_profile");
-        callbackManager= CallbackManager.Factory.create();
 
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
 
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-
-                Toast.makeText(getApplicationContext(),"Giriş iptal edildi.",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-        });
 
     }
 
-    private void handleFacebookAccessToken(AccessToken accessToken) {
 
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if(user != null){
-                                Intent intent =new Intent(SignUpActivity.this,SecondActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        } else {
-                            // If sign in fails, display a message to the user.
-
-                            Toast.makeText(SignUpActivity.this, "Giriş başarısız.",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-
-                        // ...
-                    }
-                });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser !=null){
-            startActivity(new Intent(SignUpActivity.this,SecondActivity.class));
-            finish();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode,resultCode,data);
-    }
 
     @Override
     public void onClick(View view) {
@@ -129,7 +62,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     String inputLastName = editTextLastName.getText().toString();
                     String inputEmail = editTextEmail.getText().toString();
                     String inputPassword = editTextPassword.getText().toString();
-                    mAuth.createUserWithEmailAndPassword(inputEmail,inputPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mAuth.createUserWithEmailAndPassword(inputEmail,inputPassword).addOnCompleteListener(
+                            new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
