@@ -32,27 +32,32 @@ public class SecondActivity extends AppCompatActivity {
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
 
-    private FirebaseAuth mAuth;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());//kontrol et??
         setContentView(R.layout.activity_second);
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
-
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());//kontrol et??
-        
+
+
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         //setupWithViewPager set up TabLayout with a viewpager
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.getTabAt(1).setIcon(R.drawable.questions).setText("");
+
+
 
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Soru Sor");
+        mViewPager.setCurrentItem(1);
+        toolbar.setTitle("Sorular");
         setSupportActionBar(toolbar);
 
 
@@ -60,7 +65,7 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 // supportactiionbar == toolbar
-                getSupportActionBar().setTitle(tab.getText());
+                getSupportActionBar().setTitle(mSectionsPageAdapter.getPageTitle(tab.getPosition()));
             }
 
             @Override
@@ -75,7 +80,7 @@ public class SecondActivity extends AppCompatActivity {
         });
 
 
-        mAuth=FirebaseAuth.getInstance();
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -104,11 +109,11 @@ public class SecondActivity extends AppCompatActivity {
 
 
     private void setupViewPager(ViewPager viewPager){
-        SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TabAskQuestionFragment(),"Soru Sor");
-        adapter.addFragment(new TabQuestionsFragment(),"Sorular");
-        adapter.addFragment(new TabSavedQuestionsFragment(),"Kaydedilen Sorular");
-        viewPager.setAdapter(adapter);
+
+        mSectionsPageAdapter.addFragment(new TabAskQuestionFragment(),"Soru Sor");
+        mSectionsPageAdapter.addFragment(new TabQuestionsFragment(),"Sorular");
+        mSectionsPageAdapter.addFragment(new TabSavedQuestionsFragment(),"Kaydedilen Sorular");
+        viewPager.setAdapter(mSectionsPageAdapter);
     }
 
 

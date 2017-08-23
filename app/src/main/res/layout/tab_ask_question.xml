@@ -10,25 +10,43 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
 
-    <EditText
-        android:id="@+id/editTextIssue"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="20dp"
-        android:layout_weight="0"
-        android:layout_marginBottom="20dp"
-        android:hint="Konu"
-        />
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-    <EditText
-        android:id="@+id/editTextExplanation"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:inputType="textMultiLine"
-        android:gravity="top|left"
-        android:hint="Açıklama"
-        android:layout_marginBottom="40dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Spinner
+                android:id="@+id/dropdown_categories_Quest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"/>
+
+            <EditText
+                android:id="@+id/editTextIssue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="0"
+                android:hint="Konu"
+                android:inputType="textMultiLine" />
+
+            <EditText
+                android:id="@+id/editTextExplanation"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="40dp"
+                android:gravity="top|left"
+                android:hint="Açıklama"
+                android:inputType="textMultiLine" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

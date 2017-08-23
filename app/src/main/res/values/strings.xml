@@ -26,4 +26,10 @@
     <string name="fb_login_protocol_scheme">fb125566654739298</string>
     <string name="profile">Profil</string>
 
+
+    <string-array name="tab_title_array">
+        <item>"Soru Sor"</item>
+        <item>"Sorular"</item>
+        <item>"Kaydedilen Sorular"</item>
+    </string-array>
 </resources>
