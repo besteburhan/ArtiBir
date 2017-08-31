@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.Scroller;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+
 /**
  * Created by besteburhan on 4.8.2017.
  */
@@ -38,8 +40,8 @@ public class TabAskQuestionFragment extends Fragment{
         imageButtonSend = (ImageButton) view.findViewById(R.id.imageButtonSend);
 
         spinner = (Spinner) view.findViewById(R.id.dropdown_categories_Quest);
-        String[] items =  new String[]{"Diğer","Ulaşım","Seyahat","Spor","Yeme-İçme-Alışveriş","Tatil Gezi",
-                "Sağlık","Eğitim","Haber","Sosyal Aktivite","Acil"};
+
+        String[] items =  getResources().getStringArray(R.array.categories_spinner_array);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

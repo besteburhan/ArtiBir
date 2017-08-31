@@ -23,6 +23,10 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +36,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static besteburhan.artibir.R.id.editTextPassword;
 import static besteburhan.artibir.R.id.imageView;
@@ -41,12 +50,17 @@ import static com.bumptech.glide.Glide.with;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     ImageView iVLoginScreen;
     EditText editTextEmail,editTextPassword;
-    Button buttonsignIn;
-    Button buttonSignUp;
     TextView textViewForgetPass;
+    Button buttonsignIn,buttonSignUp;
+
+
+    String facebookName;
+    String facebookEmail ;
+
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    FirebaseDatabase database;
 
     LoginButton loginButton;
     CallbackManager callbackManager;
@@ -65,33 +79,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textViewForgetPass = (TextView) findViewById(R.id.textViewForgetPassword);
         Glide.with(this).load("http://i68.tinypic.com/2nvba5w.jpg").into(iVLoginScreen);
 
+
         mAuth = FirebaseAuth.getInstance();
+        database=FirebaseDatabase.getInstance();
+
 
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
         loginButton.setReadPermissions("email", "public_profile");
         callbackManager= CallbackManager.Factory.create();
-
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Intent intent =new Intent(MainActivity.this,SecondActivity.class);
-                startActivity(intent);
-                finish();
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
-
             @Override
             public void onCancel() {
-
                 Toast.makeText(getApplicationContext(),"Giriş iptal edildi.",Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onError(FacebookException error) {
 
             }
         });
-
 
 
 
@@ -111,8 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-    private void handleFacebookAccessToken(AccessToken accessToken) {
-
+    private void handleFacebookAccessToken(final AccessToken accessToken) {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         mAuth.signInWithCredential(credential)
@@ -120,11 +128,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
 
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields", "id,name,first_name,last_name,email,picture");
+                            new GraphRequest(
+                                    AccessToken.getCurrentAccessToken(),
+                                    "/me",
+                                    parameters,
+                                    HttpMethod.GET,
+                                    new GraphRequest.Callback() {
+                                        public void onCompleted(GraphResponse response) {
+                                            try {
+
+                                                JSONObject data = response.getJSONObject();
+                                                 facebookEmail = data.getString("email");
+                                               // facebookName = data.getString("name");
+                                            } catch (Exception e){
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                            ).executeAsync();
+
+
+                            DatabaseReference dbRef =database.getReference("ArtiBir");
+                            dbRef.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(new UsersInformation(facebookEmail,facebookName,"",""));
+                            mAuth.addAuthStateListener(mAuthStateListener);
 
                         } else {
-                            // If sign in fails, display a message to the user.
+
 
                             Toast.makeText(MainActivity.this, "Giriş başarısız.",
                                     Toast.LENGTH_SHORT).show();
@@ -136,17 +168,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
+
+
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser !=null){
-            startActivity(new Intent(MainActivity.this,SecondActivity.class));
-            finish();
 
         mAuth.addAuthStateListener(mAuthStateListener);
-        }
     }
+
+
     @Override
     public void onStop() {
         super.onStop();
@@ -180,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
+                            mAuth.addAuthStateListener(mAuthStateListener);
                         } else {
                             Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }

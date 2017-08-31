@@ -32,4 +32,18 @@
         <item>"Sorular"</item>
         <item>"Kaydedilen Sorular"</item>
     </string-array>
+
+    <string-array name="categories_spinner_array">
+        <item>"Diğer"</item>
+        <item>"Acil"</item>
+        <item>"Ulaşım"</item>
+        <item>"Seyahat"</item>
+        <item>"Spor"</item>
+        <item>"Yeme-İçme-Alışveriş"</item>
+        <item>"Sağlık"</item>
+        <item>"Eğitim"</item>
+        <item>"Haber"</item>
+        <item>"Sosyal Aktivite"</item>
+
+    </string-array>
 </resources>

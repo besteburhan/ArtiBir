@@ -1,0 +1,37 @@
+package besteburhan.artibir;
+
+/**
+ * Created by besteburhan on 26.8.2017.
+ */
+
+public class UsersInformation {
+    String email;
+    String name;
+    String point;
+    String phoneNumberVerification;
+
+    public UsersInformation(){}
+
+    public UsersInformation(String email, String name, String point, String phoneNumberVerification) {
+        this.email = email;
+        this.name = name;
+        this.point = point;
+        this.phoneNumberVerification = phoneNumberVerification;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPoint() {
+        return point;
+    }
+
+    public String getPhoneNumberVerification() {
+        return phoneNumberVerification;
+    }
+}
