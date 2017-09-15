@@ -3,6 +3,7 @@ package besteburhan.artibir;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -52,7 +53,8 @@ import java.util.Locale;
 public class Maps extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener{
 
-
+    EditText editTextMeter ;
+    Button buttonMeter;
     GoogleMap mGoogleMap;
     GoogleApiClient mGoogleApiClient;
     boolean mRequestingLocationUpdates = false;
@@ -207,8 +209,8 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback,Google
 
             }
         });
-        final EditText editTextMeter = (EditText) findViewById(R.id.editTextKm);
-        final Button buttonMeter =(Button) findViewById(R.id.buttonMeter);
+        editTextMeter = (EditText) findViewById(R.id.editTextKm);
+        buttonMeter =(Button) findViewById(R.id.buttonMeter);
         buttonMeter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -401,5 +403,26 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback,Google
         if(mGoogleApiClient != null)
             mGoogleApiClient.disconnect();
         super.onStop();
+    }
+
+    public void mapsActivityEnded(View view) {
+        if(editTextMeter.getText().toString().trim().equals("") || Integer.parseInt(editTextMeter.getText().toString()) ==0){
+            Toast.makeText(Maps.this,"Lütfen mesafeyi giriniz",Toast.LENGTH_LONG).show();
+        }
+        else{
+            //Return an integer from edittext
+            LatLng latLng = marker.getPosition();
+            String stringMeter= editTextMeter.getText().toString();
+            int meter = Integer.parseInt(stringMeter);
+
+            Intent intent = new Intent();
+            intent.putExtra("latLng",latLng);
+            intent.putExtra("meter",meter);
+            setResult(RESULT_OK,intent);
+            finish();
+
+        }
+
+
     }
 }

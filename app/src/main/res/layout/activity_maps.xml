@@ -84,8 +84,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/linearLayoutKm"
-        android:layout_marginTop="444dp"
-        app:layout_constraintHorizontal_bias="0.0">
+        android:layout_marginTop="410dp"
+        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_marginEnd="8dp">
 
         <EditText
             android:id="@+id/editTextKm"
@@ -123,6 +124,22 @@
         />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="Bitti"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@drawable/go_button"
+        android:onClick="mapsActivityEnded"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutKm"
+        app:layout_constraintBottom_toBottomOf="@+id/mapFragment"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

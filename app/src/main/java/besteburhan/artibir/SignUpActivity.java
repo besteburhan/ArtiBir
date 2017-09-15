@@ -66,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 DatabaseReference dbRef = database.getReference("ArtiBir/"+"Users");
-                                dbRef.child(mAuth.getCurrentUser().getUid()).setValue(new UsersInformation(inputEmail,inputName+" "+inputLastName,"",""));
+                                dbRef.child(mAuth.getCurrentUser().getUid()).setValue(new UsersInformation(inputEmail,inputName+" "+inputLastName,"0",""));
                                 Intent intent= new Intent(getApplicationContext(),MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -94,26 +94,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String inputEmail = editTextEmail.getText().toString();
         String inputPassword = editTextPassword.getText().toString();
 
-        String show ="";
 
-        if(inputName == null || inputName.trim().equals("")){
-            show = show+"İsim ";
-        }
-        if(inputLastName == null || inputLastName.trim().equals("")){
-            show = show+"Soy İsim ";
-        }
-        if(inputEmail == null || inputEmail.trim().equals("")){
-            show = show+"E posta adresi ";
-        }
-        if(inputPassword == null || inputPassword.trim().equals("")){
-            show = show+"Şifre ";
-        }
-        if (show.equals("")){
-           return false;
-        }
-        else{
-            Toast.makeText(SignUpActivity.this, show+"boş geçilemez!", Toast.LENGTH_LONG).show();
+        if (inputName == null || inputName.trim().equals("") || inputLastName == null || inputLastName.trim().equals("")
+                || inputEmail == null || inputEmail.trim().equals("") || inputPassword == null || inputPassword.trim().equals("")) {
+            Toast.makeText(SignUpActivity.this, "Tüm alanları doldurunuz!", Toast.LENGTH_LONG).show();
             return true;
         }
+
+
+        return false;
     }
 }

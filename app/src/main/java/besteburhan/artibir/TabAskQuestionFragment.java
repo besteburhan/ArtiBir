@@ -13,14 +13,25 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Scroller;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+import static android.app.Activity.RESULT_OK;
+import static android.content.Intent.ACTION_VIEW;
 
 /**
  * Created by besteburhan on 4.8.2017.
  */
 
-public class TabAskQuestionFragment extends Fragment{
+public class TabAskQuestionFragment extends Fragment {
 
 
     EditText editTextExplanation;
@@ -29,10 +40,17 @@ public class TabAskQuestionFragment extends Fragment{
     ImageButton imageButtonAddLocation;
     ImageButton imageButtonSend;
     Spinner spinner;
+    LatLng latLng;
+    int meter=0;
+
+    FirebaseDatabase database;
+    FirebaseAuth mAuth;
+    DatabaseReference dbRef;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.tab_ask_question,container,false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.tab_ask_question, container, false);
         editTextExplanation = (EditText) view.findViewById(R.id.editTextExplanation);
         editTextIssue = (EditText) view.findViewById(R.id.editTextIssue);
         imageButtonAddLocation = (ImageButton) view.findViewById(R.id.imageButtonAddLocation);
@@ -41,28 +59,83 @@ public class TabAskQuestionFragment extends Fragment{
 
         spinner = (Spinner) view.findViewById(R.id.dropdown_categories_Quest);
 
-        String[] items =  getResources().getStringArray(R.array.categories_spinner_array);
+        String[] items = getResources().getStringArray(R.array.categories_spinner_array);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        String text = spinner.getSelectedItem().toString();
+
+        database=FirebaseDatabase.getInstance();
+        mAuth=FirebaseAuth.getInstance();
+
+
+
+
+
 
         imageButtonAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent intent = new Intent(getActivity(), Maps.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
 
+
+        imageButtonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userUid= mAuth.getCurrentUser().getUid().toString();
+                String stringIssue=editTextIssue.getText().toString();
+                String stringExplanation = editTextExplanation.getText().toString();
+                String stringCategory= spinner.getSelectedItem().toString();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy 'at' HH:mm ");
+                String stringQuestionDate = simpleDateFormat.format(new Date());
+                Object questionLocation =new QuestionLocation(latLng,meter);
+                if(stringIssue.trim().equals("") || stringExplanation.trim().equals("")){
+                    Toast.makeText(getActivity(),"Boş alanları doldurunuz.",Toast.LENGTH_LONG).show();
+                }
+                else if(latLng==null || meter==0){
+                    Toast.makeText(getActivity(),"Lütfen sormak istediğiniz konumu ve mesafeyi seçiniiz.",Toast.LENGTH_LONG).show();
+                }
+                else{
+
+                    //database myQuestionsa soru ekleme
+                    dbRef=database.getReference("ArtiBir/"+"Users/"+mAuth.getCurrentUser().getUid().toString());
+                    dbRef = dbRef.child("myQuestions").push();
+                    dbRef.setValue(new Questions(userUid,stringIssue,stringExplanation,stringQuestionDate,
+                            stringCategory,questionLocation,"0"));
+
+                    //database Question->kategorilere ekleme
+                    DatabaseReference databaseReference=database.getReference("ArtiBir").child("Questions").child(stringCategory).child(dbRef.getKey());
+                    databaseReference.setValue(new Questions(userUid,stringIssue,stringExplanation,stringQuestionDate,
+                            stringCategory,questionLocation,"0"));
+
+
+
+                }
+            }
+        });
 
         return view;
 
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);// ?
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+                latLng= (LatLng) data.getExtras().get("latLng");
+                meter = data.getExtras().getInt("meter");
+
+            }
+        }
+    }
 }

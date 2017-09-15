@@ -6,6 +6,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -43,6 +44,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import static besteburhan.artibir.R.id.editTextPassword;
 import static besteburhan.artibir.R.id.imageView;
 import static besteburhan.artibir.R.id.start;
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageView iVLoginScreen;
     EditText editTextEmail,editTextPassword;
     TextView textViewForgetPass;
-    Button buttonsignIn,buttonSignUp;
+    Button buttonSignIn,buttonSignUp;
 
 
     String facebookName;
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         iVLoginScreen = (ImageView) findViewById(R.id.imageViewLoginScreen);
         editTextEmail = (EditText) findViewById(R.id.editTextEMail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        buttonsignIn = (Button) findViewById(R.id.buttonSignIn);
+        buttonSignIn = (Button) findViewById(R.id.buttonSignIn);
         buttonSignUp = (Button) findViewById(R.id.buttonSignUp);
         textViewForgetPass = (TextView) findViewById(R.id.textViewForgetPassword);
         Glide.with(this).load("http://i68.tinypic.com/2nvba5w.jpg").into(iVLoginScreen);
@@ -86,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
-        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions(Arrays.asList(
+                "public_profile", "email"));
         callbackManager= CallbackManager.Factory.create();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -130,34 +134,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            Bundle parameters = new Bundle();
-                            parameters.putString("fields", "id,name,first_name,last_name,email,picture");
-                            new GraphRequest(
-                                    AccessToken.getCurrentAccessToken(),
-                                    "/me",
-                                    parameters,
-                                    HttpMethod.GET,
-                                    new GraphRequest.Callback() {
-                                        public void onCompleted(GraphResponse response) {
+                            GraphRequest request = GraphRequest.newMeRequest(
+                                    accessToken,
+                                    new GraphRequest.GraphJSONObjectCallback() {
+                                        @Override
+                                        public void onCompleted(
+                                                JSONObject object,
+                                                GraphResponse response) {
                                             try {
+                                                facebookName = object.getString("name");
+                                                facebookEmail = object.getString("email");
 
-                                                JSONObject data = response.getJSONObject();
-                                                 facebookEmail = data.getString("email");
-                                               // facebookName = data.getString("name");
-                                            } catch (Exception e){
+                                                DatabaseReference dbRef =database.getReference("ArtiBir");
+                                                dbRef.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(new UsersInformation(facebookEmail,facebookName,"",""));
+                                                mAuth.addAuthStateListener(mAuthStateListener);
+
+
+                                            } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
                                         }
-                                    }
-                            ).executeAsync();
+                                    });
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields", "id,name,link,email");
+                            request.setParameters(parameters);
+                            request.executeAsync();
 
 
-                            DatabaseReference dbRef =database.getReference("ArtiBir");
-                            dbRef.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(new UsersInformation(facebookEmail,facebookName,"",""));
-                            mAuth.addAuthStateListener(mAuthStateListener);
 
                         } else {
-
 
                             Toast.makeText(MainActivity.this, "Giriş başarısız.",
                                     Toast.LENGTH_SHORT).show();
