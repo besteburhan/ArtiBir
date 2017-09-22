@@ -72,11 +72,13 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback,Google
     private static final int MY_PERMISSION_REQUEST_CODE = 7171;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 7172;
 
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {//izinler tamsa?
                     if (checkPlayServices())
                         buildGoogleApiClient();
                     createLocationRequest();
@@ -149,7 +151,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback,Google
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
 
     }
-
     public boolean googleServicesAvailable() {//play sevicese ulaşılabiliyor mu
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
         int isAvailable = api.isGooglePlayServicesAvailable(this);
@@ -165,11 +166,9 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback,Google
         }
         return false;
     }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;//googleMap object dönecek
-
         displayLocation();
 
         mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {

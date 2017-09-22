@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                                 DatabaseReference dbRef =database.getReference("ArtiBir");
                                                 dbRef.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(new UsersInformation(facebookEmail,facebookName,"",""));
-                                                mAuth.addAuthStateListener(mAuthStateListener);
+
 
 
                                             } catch (JSONException e) {

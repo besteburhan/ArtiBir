@@ -1,6 +1,9 @@
 package besteburhan.artibir;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +24,7 @@ import android.view.ViewGroup;
 
 import android.view.WindowInsets;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -33,6 +37,8 @@ public class SecondActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
 
+    boolean mBounded;
+    LocationChangeService mLocationChangeService;
 
 
     @Override
@@ -80,8 +86,44 @@ public class SecondActivity extends AppCompatActivity {
         });
 
 
+        ServiceConnection mServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder ıBinder) {
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+
+            }
+        };
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Intent mIntent = new Intent(this, LocationChangeService.class);
+        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+    };
+
+    ServiceConnection mConnection = new ServiceConnection() {
+
+        public void onServiceDisconnected(ComponentName name) {
+            Toast.makeText(SecondActivity.this, "Service is disconnected", 1000).show();
+            mBounded = false;
+            mLocationChangeService = null;
+        }
+
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Toast.makeText(SecondActivity.this, "Service is connected", 1000).show();
+            mBounded = true;
+            LocationChangeService.LocationChangeServiceBinder mLocalBinder = (LocationChangeService.LocationChangeServiceBinder) service;
+            mLocationChangeService = mLocalBinder.getBinder();
+        }
+    };
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
