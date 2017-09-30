@@ -9,10 +9,13 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,6 +33,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 public class LocationChangeService extends Service implements GoogleApiClient.ConnectionCallbacks,
@@ -46,6 +50,7 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
     double doubleLongitude;
     int meter;
 
+
     private static int UPDATE_INTERVAL = 5000; // SEC
     private static int FATEST_INTERVAL = 3000; // SEC
     private static int DISPLACEMENT = 10; // METERS
@@ -55,146 +60,10 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
     }
 
 
+
+
     @Override
     public void onCreate() {
-
-
-
-        /*if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-        } else {
-            if (checkPlayServices()) {
-                buildGoogleApiClient();
-                createLocationRequest();
-            }
-        }
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        locationListener = new android.location.LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-
-                mLastLocation = location;
-
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-
-            }
-        };
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                1000,
-                1,
-                locationListener);
-
-
-
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = database.getReference("ArtiBir/Questions");
-
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds: dataSnapshot.getChildren()){// ds -> acil,ulaşım,,,
-                    final DatabaseReference database_Reference = ds.getRef();//acil
-                    database_Reference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (final DataSnapshot data_snapshot:dataSnapshot.getChildren()){//data_snapshot->K64BHNV584,THf6354bf5gb
-                                DatabaseReference db_ref= data_snapshot.child("questionlocationClass").child("latLng").child("latitude").getRef();
-                                db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        String latitude= (String) data_snapshot.getValue();
-                                        doubleLatitude =Double.parseDouble(latitude);
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                                db_ref= data_snapshot.child("questionlocationClass").child("latLng").child("longitude").getRef();
-                                db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        String longitude= (String) data_snapshot.getValue();
-                                        doubleLongitude = Double.parseDouble(longitude);
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                                db_ref =data_snapshot.child("questionlocationClass").child("meter").getRef();
-                                db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        String stringMeter = (String) data_snapshot.getValue();
-                                        meter = Integer.parseInt(stringMeter);
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-
-
-                                Location location_question = null;
-                                location_question.setLatitude(doubleLatitude);
-                                location_question.setLongitude(doubleLongitude);
-                                if (location_question.distanceTo(mLastLocation) <= meter) {
-                                    Toast.makeText(getApplicationContext(),"konum içindesin",Toast.LENGTH_LONG).show();
-
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
 
     }
 
@@ -274,10 +143,107 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
     }
 
     @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
-        if(mGoogleApiClient != null)
-            mGoogleApiClient.connect();
+    public int onStartCommand(final Intent intent, int flags, int startId) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        } else {
+            if (checkPlayServices()) {
+                buildGoogleApiClient();
+                createLocationRequest();
+            }
+        }
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        locationListener = new android.location.LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                mLastLocation = location;
+
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+
+        }
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1000,
+                1,
+                locationListener);
+
+
+
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference dbRef = database.getReference("ArtiBir/Questions");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){//acil..
+                    for (DataSnapshot dataSnapshot2: dataSnapshot1.getChildren()){//KFGA6486DF..
+                        if(dataSnapshot2.exists()) {
+                            QuestionLocation questionLocation =dataSnapshot2.child("questionLocationClass").getValue(QuestionLocation.class);
+                            Questions questions = dataSnapshot2.getValue(Questions.class);
+
+                            String lat=questionLocation.getLatitude();
+                            String lng = questionLocation.getLongitude();
+                            String met= questionLocation.getMeter();
+                            int meter= Integer.parseInt(met);
+                            Double latitude = Double.parseDouble(lat);
+                            Double longitude = Double.parseDouble(lng);
+                            Location locationQuestion = new Location("");
+                            locationQuestion.setLongitude(longitude);
+                            locationQuestion.setLatitude(latitude);
+                            float distance= locationQuestion.distanceTo(mLastLocation);
+                            if(distance<=meter){
+                                Intent i= new Intent();
+                                i.putExtra("messageId",dataSnapshot2.getKey());
+                                i.setClass(getApplicationContext(),TabQuestionsFragment.class);
+
+                            }
+
+
+                        }
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

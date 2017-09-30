@@ -94,7 +94,13 @@ public class TabAskQuestionFragment extends Fragment {
                 String stringCategory= spinner.getSelectedItem().toString();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy 'at' HH:mm ");
                 String stringQuestionDate = simpleDateFormat.format(new Date());
-                Object questionLocation =new QuestionLocation(latLng,meter);
+                Double lat= latLng.latitude;
+                String latitude=Double.toString(lat);
+                Double lng= latLng.longitude;
+                String longitude= Double.toString(lng);
+                String stringMeter = Integer.toString(meter);
+
+                Object questionLocation =new QuestionLocation(latitude,longitude,stringMeter);
                 if(stringIssue.trim().equals("") || stringExplanation.trim().equals("")){
                     Toast.makeText(getActivity(),"Boş alanları doldurunuz.",Toast.LENGTH_LONG).show();
                 }
@@ -106,13 +112,13 @@ public class TabAskQuestionFragment extends Fragment {
                     //database myQuestionsa soru ekleme
                     dbRef=database.getReference("ArtiBir/"+"Users/"+mAuth.getCurrentUser().getUid().toString());
                     dbRef = dbRef.child("myQuestions").push();
-                    dbRef.setValue(new Questions(userUid,stringIssue,stringExplanation,stringQuestionDate,
-                            stringCategory,questionLocation,"0"));
+                    dbRef.setValue(new Questions(stringCategory,stringQuestionDate,stringExplanation
+                            ,stringIssue, questionLocation,"0",userUid));
 
                     //database Question->kategorilere ekleme
                     DatabaseReference databaseReference=database.getReference("ArtiBir").child("Questions").child(stringCategory).child(dbRef.getKey());
-                    databaseReference.setValue(new Questions(userUid,stringIssue,stringExplanation,stringQuestionDate,
-                            stringCategory,questionLocation,"0"));
+                    databaseReference.setValue(new Questions(stringCategory,stringQuestionDate
+                            ,stringExplanation,stringIssue, questionLocation,"0",userUid));
 
 
 

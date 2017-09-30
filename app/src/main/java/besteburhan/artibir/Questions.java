@@ -18,9 +18,8 @@ public class Questions {
 
 
 
-
-
-    public Questions(String userUid, String questionIssue, String questionExplanation,  String questionDate,String questionCategory,Object questionLocationClass,  String questionPoint) {
+    public  Questions(){}
+    public Questions(String questionCategory, String questionDate,String questionExplanation, String questionIssue,Object questionLocationClass,String questionPoint,String userUid) {
         this.userUid = userUid;
         this.questionIssue = questionIssue;
         this.questionExplanation = questionExplanation;

@@ -138,7 +138,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback,Google
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API).build();
 
-        //Fix first time run app if permission doesn't grant yet so can't get anything
+
         mGoogleApiClient.connect();
 
 

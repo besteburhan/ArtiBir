@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.WindowInsets;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,14 +52,10 @@ public class SecondActivity extends AppCompatActivity {
         setupViewPager(mViewPager);
 
 
-
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         //setupWithViewPager set up TabLayout with a viewpager
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(1).setIcon(R.drawable.questions).setText("");
-
-
 
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,17 +83,7 @@ public class SecondActivity extends AppCompatActivity {
         });
 
 
-        ServiceConnection mServiceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName componentName, IBinder ıBinder) {
-
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName componentName) {
-
-            }
-        };
+        ListView l = findViewById(R.id.listViewQuestions);
 
     }
 
@@ -111,13 +98,13 @@ public class SecondActivity extends AppCompatActivity {
     ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceDisconnected(ComponentName name) {
-            Toast.makeText(SecondActivity.this, "Service is disconnected", 1000).show();
+            Toast.makeText(SecondActivity.this, "Service is disconnected", Toast.LENGTH_SHORT).show();
             mBounded = false;
             mLocationChangeService = null;
         }
 
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Toast.makeText(SecondActivity.this, "Service is connected", 1000).show();
+            Toast.makeText(SecondActivity.this, "Service is connected", Toast.LENGTH_SHORT).show();
             mBounded = true;
             LocationChangeService.LocationChangeServiceBinder mLocalBinder = (LocationChangeService.LocationChangeServiceBinder) service;
             mLocationChangeService = mLocalBinder.getBinder();

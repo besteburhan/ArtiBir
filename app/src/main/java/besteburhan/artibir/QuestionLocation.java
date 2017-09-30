@@ -7,27 +7,39 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public class QuestionLocation {
-    LatLng latLng;
-    int meter;
+    String latitude;
+    String longitude;
+    String meter;
 
-    public QuestionLocation(LatLng latLng, int meter) {
-        this.latLng = latLng;
+    public  QuestionLocation(){}
+
+    public QuestionLocation(String latitude, String longitude, String meter) {
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.meter = meter;
     }
 
-    public LatLng getLatLng() {
-        return latLng;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
-    public int getMeter() {
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getMeter() {
         return meter;
     }
 
-    public void setMeter(int meter) {
+    public void setMeter(String meter) {
         this.meter = meter;
     }
 }

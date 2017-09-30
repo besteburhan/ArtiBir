@@ -30,7 +30,7 @@ public class TabQuestionsFragment extends Fragment{
 
 
 
-    FirebaseDatabase database;
+
 
 
     @Nullable
@@ -39,22 +39,8 @@ public class TabQuestionsFragment extends Fragment{
         View view= inflater.inflate(R.layout.tab_questions,container,false);
 
 
-
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = database.getReference("ArtiBir/"+"Questions");
-
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        Intent i = Intent.getIntentOld();
+        String a= i.getStringExtra("messageId");
 
 
 
