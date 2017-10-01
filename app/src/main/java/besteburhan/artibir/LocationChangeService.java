@@ -1,3 +1,4 @@
+
 package besteburhan.artibir;
 
 import android.*;
@@ -9,13 +10,13 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.widget.ListView;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -33,8 +34,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class LocationChangeService extends Service implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -49,7 +51,7 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
     double doubleLatitude;
     double doubleLongitude;
     int meter;
-
+    ArrayList<Questions> arrayListQuestions= new ArrayList<Questions>();
 
     private static int UPDATE_INTERVAL = 5000; // SEC
     private static int FATEST_INTERVAL = 3000; // SEC
@@ -60,13 +62,11 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
     }
 
 
-
-
     @Override
     public void onCreate() {
 
-    }
 
+    }
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
@@ -77,7 +77,6 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
         }
         return true;
     }
-
     private synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -85,7 +84,6 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
                 .addApi(LocationServices.API).build();
 
         mGoogleApiClient.connect();
-
 
     }
 
@@ -143,7 +141,7 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
     }
 
     @Override
-    public int onStartCommand(final Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -200,11 +198,12 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
 
 
 
-        database = FirebaseDatabase.getInstance();
+       database = FirebaseDatabase.getInstance();
         DatabaseReference dbRef = database.getReference("ArtiBir/Questions");
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                arrayListQuestions.clear();
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){//acil..
                     for (DataSnapshot dataSnapshot2: dataSnapshot1.getChildren()){//KFGA6486DF..
                         if(dataSnapshot2.exists()) {
@@ -220,20 +219,23 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
                             Location locationQuestion = new Location("");
                             locationQuestion.setLongitude(longitude);
                             locationQuestion.setLatitude(latitude);
-                            float distance= locationQuestion.distanceTo(mLastLocation);
-                            if(distance<=meter){
-                                Intent i= new Intent();
-                                i.putExtra("messageId",dataSnapshot2.getKey());
-                                i.setClass(getApplicationContext(),TabQuestionsFragment.class);
-
+                            if(mLastLocation!=null){
+                                float distance= locationQuestion.distanceTo(mLastLocation);
+                                if(distance<=meter){
+                                    arrayListQuestions.add(questions);
+                                }
+                                else{
+                                    continue;
+                                }
                             }
-
 
                         }
                     }
-
                 }
-
+                Intent in = new Intent();
+                in.putParcelableArrayListExtra("arrayListQuestions",arrayListQuestions);
+                in.setAction("that");
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(in);
             }
 
             @Override
@@ -241,8 +243,6 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
 
             }
         });
-
-
         return super.onStartCommand(intent, flags, startId);
     }
 

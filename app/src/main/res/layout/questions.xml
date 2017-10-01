@@ -34,8 +34,14 @@
                         android:id="@+id/textViewIssue"
                         android:layout_width="wrap_content"
                         android:layout_height="60dp"
-                        android:layout_weight="1"
-                        android:text="TextView" />
+                        android:layout_weight="1" />
+                    <TextView
+                        android:id="@+id/textViewCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_weight="0"
+                        android:layout_gravity="bottom"
+                        android:gravity="bottom"/>
 
                 </LinearLayout>
 
@@ -53,12 +59,12 @@
                         app:srcCompat="@drawable/ic_thumbs_up_down_black_24dp" />
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/textViewPoint"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:layout_height="40dp"
-                        android:text="TextView" />
+                         />
 
                     <ImageView
                         android:id="@+id/imageView4"
@@ -68,12 +74,12 @@
                         app:srcCompat="@drawable/ic_comment_black_24dp" />
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/textViewComments"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="TextView" />
+                         />
 
                     <LinearLayout
                         android:layout_width="20dp"
@@ -83,14 +89,10 @@
                         <ImageView
                             android:id="@+id/imageView5"
                             android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_height="40dp"
                             app:srcCompat="@drawable/ic_today_black_24dp" />
 
-                        <ImageView
-                            android:id="@+id/imageView6"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            app:srcCompat="@drawable/ic_location_on_black_24dp" />
+                         />
 
                     </LinearLayout>
 
@@ -101,16 +103,13 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textView5"
+                            android:id="@+id/textViewDate"
                             android:layout_width="match_parent"
-                            android:layout_height="20dp"
-                            android:text="TextView" />
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"/>
 
-                        <TextView
-                            android:id="@+id/textView6"
-                            android:layout_width="match_parent"
-                            android:layout_height="20dp"
-                            android:text="TextView" />
+
                     </LinearLayout>
 
                 </LinearLayout>

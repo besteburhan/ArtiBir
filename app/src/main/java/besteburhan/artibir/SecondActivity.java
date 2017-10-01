@@ -1,12 +1,17 @@
 package besteburhan.artibir;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -31,11 +36,14 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class SecondActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class SecondActivity extends AppCompatActivity{
 
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
+
 
 
     boolean mBounded;
@@ -52,10 +60,14 @@ public class SecondActivity extends AppCompatActivity {
         setupViewPager(mViewPager);
 
 
+
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         //setupWithViewPager set up TabLayout with a viewpager
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(1).setIcon(R.drawable.questions).setText("");
+
+
 
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -83,17 +95,17 @@ public class SecondActivity extends AppCompatActivity {
         });
 
 
-        ListView l = findViewById(R.id.listViewQuestions);
+
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         Intent mIntent = new Intent(this, LocationChangeService.class);
+        startService(mIntent);
         bindService(mIntent, mConnection, BIND_AUTO_CREATE);
-    };
+    }
 
     ServiceConnection mConnection = new ServiceConnection() {
 
@@ -110,6 +122,8 @@ public class SecondActivity extends AppCompatActivity {
             mLocationChangeService = mLocalBinder.getBinder();
         }
     };
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

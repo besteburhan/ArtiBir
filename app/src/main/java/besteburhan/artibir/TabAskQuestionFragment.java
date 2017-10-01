@@ -40,7 +40,7 @@ public class TabAskQuestionFragment extends Fragment {
     ImageButton imageButtonAddLocation;
     ImageButton imageButtonSend;
     Spinner spinner;
-    LatLng latLng;
+    LatLng latLng=null;
     int meter=0;
 
     FirebaseDatabase database;
@@ -92,15 +92,9 @@ public class TabAskQuestionFragment extends Fragment {
                 String stringIssue=editTextIssue.getText().toString();
                 String stringExplanation = editTextExplanation.getText().toString();
                 String stringCategory= spinner.getSelectedItem().toString();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy 'at' HH:mm ");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy '  ' HH:mm ");
                 String stringQuestionDate = simpleDateFormat.format(new Date());
-                Double lat= latLng.latitude;
-                String latitude=Double.toString(lat);
-                Double lng= latLng.longitude;
-                String longitude= Double.toString(lng);
-                String stringMeter = Integer.toString(meter);
 
-                Object questionLocation =new QuestionLocation(latitude,longitude,stringMeter);
                 if(stringIssue.trim().equals("") || stringExplanation.trim().equals("")){
                     Toast.makeText(getActivity(),"Boş alanları doldurunuz.",Toast.LENGTH_LONG).show();
                 }
@@ -108,7 +102,13 @@ public class TabAskQuestionFragment extends Fragment {
                     Toast.makeText(getActivity(),"Lütfen sormak istediğiniz konumu ve mesafeyi seçiniiz.",Toast.LENGTH_LONG).show();
                 }
                 else{
+                    Double lat= latLng.latitude;
+                    String latitude=Double.toString(lat);
+                    Double lng= latLng.longitude;
+                    String longitude= Double.toString(lng);
+                    String stringMeter = Integer.toString(meter);
 
+                    Object questionLocation =new QuestionLocation(latitude,longitude,stringMeter);
                     //database myQuestionsa soru ekleme
                     dbRef=database.getReference("ArtiBir/"+"Users/"+mAuth.getCurrentUser().getUid().toString());
                     dbRef = dbRef.child("myQuestions").push();

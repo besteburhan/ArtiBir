@@ -1,15 +1,19 @@
 package besteburhan.artibir;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +34,10 @@ public class TabQuestionsFragment extends Fragment{
 
 
 
+    Adapter adapter;
+    ArrayList<Questions> arrayListQuestions= new ArrayList<Questions>();
+
+    ListView listView;
 
 
 
@@ -39,12 +47,24 @@ public class TabQuestionsFragment extends Fragment{
         View view= inflater.inflate(R.layout.tab_questions,container,false);
 
 
-        Intent i = Intent.getIntentOld();
-        String a= i.getStringExtra("messageId");
-
-
-
 
         return view;
     }
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent ıntent) {
+            arrayListQuestions  = ıntent.getParcelableArrayListExtra("arrayListQuestions");
+            adapter = new Adapter(getActivity(),arrayListQuestions);
+            listView = getView().findViewById(R.id.listViewQuestions);
+            listView.setAdapter(adapter);
+
+        }
+    };
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("that"));//
+    }
+
 }
