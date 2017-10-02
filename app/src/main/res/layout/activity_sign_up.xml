@@ -17,7 +17,7 @@
         android:orientation="vertical"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp">
+        android:layout_marginTop="70dp">
 
         <EditText
             android:id="@+id/editTextName"
@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:hint="İsim"
             android:layout_gravity="center"
-
+            android:backgroundTint="#1C1E47"
+            android:textColor="#1C1E47"
             android:inputType="textPersonName"
             android:textSize="25dp" />
 
@@ -34,6 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Soy İsim"
+            android:backgroundTint="#1C1E47"
+            android:textColor="#1C1E47"
             android:inputType="textPersonName"
             android:textSize="25dp" />
 
@@ -41,8 +44,10 @@
             android:id="@+id/editTextEMail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="E Posta Adresiniz"
+            android:hint="E-mail"
             android:textSize="25dp"
+            android:backgroundTint="#1C1E47"
+            android:textColor="#1C1E47"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -51,6 +56,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:textSize="25dp"
+            android:backgroundTint="#1C1E47"
+            android:textColor="#1C1E47"
             android:layout_marginBottom="25dp"
             android:inputType="textPassword" />
 
@@ -59,6 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Kayıt Ol"
+            android:background="@drawable/mybutton_sign_up"
             android:onClick="onClick"/>
 
 

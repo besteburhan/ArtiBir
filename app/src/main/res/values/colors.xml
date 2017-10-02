@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#6200EA</color>
     <color name="colorAccent">#beb9bf</color>
     <color name="touch_button">#FF9C9FB7</color>
+    <color name="marker_color">#28e8e8ec</color>
 </resources>

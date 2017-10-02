@@ -243,11 +243,11 @@ public class LocationChangeService extends Service implements GoogleApiClient.Co
 
             }
         });
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Service stopped", Toast.LENGTH_LONG).show();
+
     }
 }

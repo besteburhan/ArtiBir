@@ -11,11 +11,11 @@ import android.view.ViewGroup;
  * Created by besteburhan on 4.8.2017.
  */
 
-public class TabSavedQuestionsFragment extends Fragment {
+public class TabMyQuestionsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.tab_saved_questions,container,false);
+        View view=inflater.inflate(R.layout.tab_my_questions,container,false);
         return view;
 
     }

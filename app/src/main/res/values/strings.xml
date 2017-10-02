@@ -10,7 +10,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="tab_ask_question">Soru Sor</string>
     <string name="tab_questions">Sorular</string>
-    <string name="tab_saved_questions">Kaydedilmiş Sorular</string>
+    <string name="tab_my_questions">Sorularım</string>
     <string name="where_do_you_want_to_go">Nereye gitmek istiyorsunuz?</string>
     <string name="go">GİT</string>
 
@@ -30,7 +30,7 @@
     <string-array name="tab_title_array">
         <item>"Soru Sor"</item>
         <item>"Sorular"</item>
-        <item>"Kaydedilen Sorular"</item>
+        <item>"Sorularım"</item>
     </string-array>
 
     <string-array name="categories_spinner_array">

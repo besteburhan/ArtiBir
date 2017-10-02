@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,7 +112,7 @@ public class TabAskQuestionFragment extends Fragment {
 
                     Object questionLocation =new QuestionLocation(latitude,longitude,stringMeter);
                     //database myQuestionsa soru ekleme
-                    dbRef=database.getReference("ArtiBir/"+"Users/"+mAuth.getCurrentUser().getUid().toString());
+                    dbRef=database.getReference("ArtiBir/Users/"+ mAuth.getCurrentUser().getUid().toString());
                     dbRef = dbRef.child("myQuestions").push();
                     dbRef.setValue(new Questions(stringCategory,stringQuestionDate,stringExplanation
                             ,stringIssue, questionLocation,"0",userUid));
@@ -119,6 +121,10 @@ public class TabAskQuestionFragment extends Fragment {
                     DatabaseReference databaseReference=database.getReference("ArtiBir").child("Questions").child(stringCategory).child(dbRef.getKey());
                     databaseReference.setValue(new Questions(stringCategory,stringQuestionDate
                             ,stringExplanation,stringIssue, questionLocation,"0",userUid));
+
+                    editTextIssue.setText("");
+                    editTextExplanation.setText("");
+
 
 
 

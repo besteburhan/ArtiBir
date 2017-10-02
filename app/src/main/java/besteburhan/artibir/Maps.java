@@ -222,8 +222,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback,Google
             }
         });
 
-
-
     }
 
     private void drawCircle(LatLng ll, int meter) {
@@ -236,11 +234,12 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback,Google
 
 
         else {
+
             CircleOptions circleOptions = new CircleOptions();
             circleOptions.center(ll)
                     .radius(meter)
                     .strokeColor(Color.BLACK)
-                    .fillColor(0x30ff0000)
+                    .fillColor(R.color.marker_color)
                     .strokeWidth(2);
 
             circle = mGoogleMap.addCircle(circleOptions);
@@ -421,7 +420,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback,Google
             finish();
 
         }
-
 
     }
 }

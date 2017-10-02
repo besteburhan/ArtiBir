@@ -44,17 +44,19 @@ public class Adapter extends BaseAdapter{
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View satir;
+        View line;
         Questions questions=arrayList.get(i);
-        satir = layoutInflater.inflate(R.layout.questions,null);
-        TextView textViewIssue = satir.findViewById(R.id.textViewIssue);
-        TextView textViewDate = satir.findViewById(R.id.textViewDate);
-        TextView textViewPoint = satir.findViewById(R.id.textViewPoint);
-        TextView textViewCategory = satir.findViewById(R.id.textViewCategory);
+        line = layoutInflater.inflate(R.layout.questions,null);
+        TextView textViewIssue = line.findViewById(R.id.textViewIssue);
+        TextView textViewDate = line.findViewById(R.id.textViewDate);
+        TextView textViewPoint = line.findViewById(R.id.textViewPoint);
+        TextView textViewCategory = line.findViewById(R.id.textViewCategory);
+        TextView textViewExplanation = line.findViewById(R.id.textViewExplanation);
         textViewIssue.setText(questions.getQuestionIssue());
         textViewDate.setText(questions.getQuestionDate());
         textViewPoint.setText(questions.getQuestionPoint());
         textViewCategory.setText(questions.getQuestionCategory());
-        return satir;
+        textViewExplanation.setText(questions.getQuestionExplanation());
+        return line;
     }
 }

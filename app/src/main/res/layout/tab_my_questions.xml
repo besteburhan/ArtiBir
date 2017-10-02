@@ -10,7 +10,6 @@
     <TextView
         android:id="@+id/section_label3"
         android:layout_width="wrap_content"
-        android:text="Kaydedilen sorular"
         android:layout_height="wrap_content" />
 
 </RelativeLayout>

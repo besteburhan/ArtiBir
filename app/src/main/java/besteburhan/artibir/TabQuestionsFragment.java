@@ -1,5 +1,6 @@
 package besteburhan.artibir;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ public class TabQuestionsFragment extends Fragment{
 
 
 
+
     Adapter adapter;
     ArrayList<Questions> arrayListQuestions= new ArrayList<Questions>();
 
@@ -50,14 +53,18 @@ public class TabQuestionsFragment extends Fragment{
 
         return view;
     }
+
+
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent ıntent) {
             arrayListQuestions  = ıntent.getParcelableArrayListExtra("arrayListQuestions");
-            adapter = new Adapter(getActivity(),arrayListQuestions);
-            listView = getView().findViewById(R.id.listViewQuestions);
-            listView.setAdapter(adapter);
-
+            if(getActivity()!=null){
+                adapter = new Adapter(getActivity(),arrayListQuestions);
+                listView = getView().findViewById(R.id.listViewQuestions);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
         }
     };
     @Override

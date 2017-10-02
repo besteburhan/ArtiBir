@@ -7,13 +7,13 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:id="@+id/container_tab_ask_question">
 
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,6 +24,7 @@
                 android:id="@+id/dropdown_categories_Quest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#1C1E47"
                 android:spinnerMode="dropdown"/>
 
             <EditText
@@ -32,18 +33,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
+                android:textColor="#1C1E47"
                 android:layout_weight="0"
                 android:hint="Konu"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:backgroundTint="#1C1E47"/>
 
             <EditText
                 android:id="@+id/editTextExplanation"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginBottom="40dp"
+                android:layout_height="260dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="top|left"
                 android:hint="Açıklama"
-                android:inputType="textMultiLine" />
+                android:textColor="#1C1E47"
+                android:inputType="textMultiLine"
+                android:backgroundTint="#1C1E47"/>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -68,6 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
+            android:clickable="true"
             app:srcCompat="@drawable/add_location" />
 
         <ImageButton
@@ -76,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
+            android:clickable="true"
             app:srcCompat="@drawable/sendbutton" />
 
 
